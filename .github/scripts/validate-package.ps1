@@ -39,6 +39,30 @@ if ($definition.name -ne "Threadlight.EditorUI" -or $definition.references.Count
 $assemblyMeta = Get-Content -LiteralPath (Join-Path $root "Editor/Threadlight.EditorUI.asmdef.meta") -Raw
 if ($assemblyMeta -notmatch 'guid: ba116ed4e1e542ca82aceac5f1314ca1') { throw "Shared UI assembly GUID changed." }
 
+# Shared controls may serve either audience; product screens and workflows stay
+# in their owning package. Check source as well as declared dependencies.
+$editorRoot = Join-Path $root "Editor"
+$assemblies = @(Get-ChildItem -LiteralPath $editorRoot -Recurse -File -Filter '*.asmdef')
+if ($assemblies.Count -ne 1) { throw "Shared UI must contain only its neutral editor assembly." }
+foreach ($script in Get-ChildItem -LiteralPath $root -Recurse -File -Filter '*.cs') {
+    if ($script.FullName -match '[\\/]\.(git|github)[\\/]') { continue }
+    $source = Get-Content -LiteralPath $script.FullName -Raw
+    if ($source -match '\bThreadlight\.(Authoring|Builder|Mirroring|Components)\b|\bVRC\.') {
+        throw "Shared UI source must not depend on product or SDK types: $($script.Name)"
+    }
+    if ($source -match ':\s*(UnityEditor\.)?EditorWindow\b|\[\s*(UnityEditor\.)?(CustomEditor|InitializeOnLoad|InitializeOnLoadMethod)\b') {
+        throw "Product windows, inspectors and automatic startup behavior belong in their owning package: $($script.Name)"
+    }
+    foreach ($menu in [regex]::Matches($source, '\[\s*(?:UnityEditor\.)?MenuItem\s*\(([^\]]*)\)\s*\]')) {
+        # This accessibility preference applies to customer and creator UI alike.
+        if ($script.Name -ne 'ThreadlightEditorPreferences.cs' -or
+            $menu.Groups[1].Value -notmatch '^ReducedMotionMenu\s*(,|$)' -or
+            $source -notmatch 'const string ReducedMotionMenu\s*=\s*"Tools/ThreadLight/Reduced Motion"\s*;') {
+            throw "Product menu actions must not be registered by Shared UI: $($script.Name)"
+        }
+    }
+}
+
 $contentFiles = Get-ChildItem -LiteralPath $root -Recurse -File -Force | Where-Object {
     $_.Extension -ne ".meta" -and
     $_.FullName -notmatch '[\\/]\.git[\\/]' -and

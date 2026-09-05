@@ -1,0 +1,18 @@
+name: Validate Shared UI Boundary
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Validate shared UI package and ownership boundary
+        shell: pwsh
+        run: ./.github/scripts/validate-package.ps1 -PackageRoot . -ExpectedName "com.wolfyvr.threadlight.ui"
