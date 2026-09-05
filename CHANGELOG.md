@@ -1,5 +1,5 @@
 # Changelog
 
-## 1.0.0
+## 1.0.1
 
-- Shared ThreadLight editor theme, controls, tooltips, and branding.
+Brighter shared theme and improved text-field contrast and alignment.

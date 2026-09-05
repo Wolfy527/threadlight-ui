@@ -36,7 +36,7 @@ public static class ThreadlightEditorTheme {
     public const string CompactLogoGuid = "c71d6b840cd24e238c50c7a34bd7e3ad";
     public const string CompactLogoPath =
         "Packages/com.wolfyvr.threadlight.ui/Threadlight Compact Mark.png";
-    public static readonly Color Accent = new Color(0.82f, 0.42f, 0.16f, 1f);
+    public static readonly Color Accent = new Color(0.94f, 0.56f, 0.26f, 1f);
     public static readonly Color AccentBright = new Color(0.98f, 0.69f, 0.31f, 1f);
     public static readonly Color AccentDark = new Color(0.42f, 0.18f, 0.08f, 1f);
     public static readonly Color AccentDim = new Color(0.82f, 0.42f, 0.16f, 0.26f);
@@ -47,15 +47,15 @@ public static class ThreadlightEditorTheme {
         new Color(1.00f, 0.73f, 0.40f, 0.94f);
     public static readonly Color HighlightAccent =
         new Color(1.00f, 0.80f, 0.50f, 1f);
-    public static readonly Color Background = new Color(0.045f, 0.036f, 0.033f, 1f);
+    public static readonly Color Background = new Color(0.060f, 0.048f, 0.042f, 1f);
     public static readonly Color BackgroundDark = new Color(0.020f, 0.017f, 0.016f, 1f);
-    public static readonly Color HeaderLeft = new Color(0.130f, 0.065f, 0.040f, 1f);
-    public static readonly Color HeaderMid = new Color(0.075f, 0.052f, 0.043f, 1f);
-    public static readonly Color HeaderRight = new Color(0.035f, 0.044f, 0.039f, 1f);
+    public static readonly Color HeaderLeft = new Color(0.180f, 0.100f, 0.065f, 1f);
+    public static readonly Color HeaderMid = new Color(0.105f, 0.075f, 0.060f, 1f);
+    public static readonly Color HeaderRight = new Color(0.052f, 0.063f, 0.054f, 1f);
     public static readonly Color HeaderDescription = new Color(0.027f, 0.024f, 0.022f, 0.80f);
-    public static readonly Color ModuleLeft = new Color(0.120f, 0.065f, 0.040f, 1f);
-    public static readonly Color ModuleMid = new Color(0.072f, 0.051f, 0.043f, 1f);
-    public static readonly Color ModuleRight = new Color(0.040f, 0.045f, 0.040f, 1f);
+    public static readonly Color ModuleLeft = new Color(0.155f, 0.090f, 0.060f, 1f);
+    public static readonly Color ModuleMid = new Color(0.095f, 0.072f, 0.058f, 1f);
+    public static readonly Color ModuleRight = new Color(0.055f, 0.060f, 0.052f, 1f);
     public static readonly Color ModuleCore =
         new Color(0.105f, 0.072f, 0.050f, 1f);
     public static readonly Color ModuleCoreHover =
@@ -87,7 +87,7 @@ public static class ThreadlightEditorTheme {
     public static readonly Color WorkspacePrefabAccent =
         new Color(0.88f, 0.48f, 0.22f, 1f);
     public static readonly Color WorkspaceFolderAccent =
-        new Color(0.72f, 0.32f, 0.20f, 1f);
+        new Color(1.00f, 0.65f, 0.38f, 1f);
     public static readonly Color WorkspaceExportAccent =
         new Color(0.42f, 0.62f, 0.36f, 1f);
     public static readonly Color WorkspaceReviewAccent =
@@ -98,13 +98,13 @@ public static class ThreadlightEditorTheme {
         new Color(0.105f, 0.078f, 0.060f, 0.78f);
     public static readonly Color GlassHover =
         new Color(0.155f, 0.115f, 0.080f, 0.90f);
-    public static readonly Color Panel = new Color(0.082f, 0.065f, 0.055f, 1f);
-    public static readonly Color PanelTop = new Color(0.110f, 0.082f, 0.062f, 1f);
-    public static readonly Color PanelBottom = new Color(0.055f, 0.047f, 0.042f, 1f);
+    public static readonly Color Panel = new Color(0.105f, 0.085f, 0.072f, 1f);
+    public static readonly Color PanelTop = new Color(0.140f, 0.108f, 0.085f, 1f);
+    public static readonly Color PanelBottom = new Color(0.075f, 0.064f, 0.056f, 1f);
     public static readonly Color PanelHeader = new Color(0.46f, 0.27f, 0.13f, 0.22f);
     public static readonly Color SectionHeader =
         new Color(0.25f, 0.15f, 0.085f, 0.70f);
-    public static readonly Color PanelInset = new Color(0.032f, 0.028f, 0.025f, 1f);
+    public static readonly Color PanelInset = new Color(0.048f, 0.041f, 0.036f, 1f);
     public static readonly Color Card = Panel;
     public static readonly Color CardSoft = PanelTop;
     public static readonly Color CardHover = new Color(0.145f, 0.100f, 0.070f, 1f);
@@ -122,13 +122,13 @@ public static class ThreadlightEditorTheme {
     public static readonly Color TreeRowHover =
         new Color(0.145f, 0.105f, 0.070f, 0.94f);
     public static readonly Color TreeRowEven =
-        new Color(0.070f, 0.058f, 0.050f, 0.86f);
+        new Color(0.110f, 0.090f, 0.074f, 1f);
     public static readonly Color TreeRowOdd =
-        new Color(0.057f, 0.051f, 0.045f, 0.84f);
+        new Color(0.085f, 0.073f, 0.062f, 1f);
     public static readonly Color TreeRequiredAccent =
-        new Color(0.42f, 0.72f, 0.66f, 0.82f);
+        new Color(0.58f, 0.88f, 0.80f, 1f);
     public static readonly Color TreeCustomAccent =
-        new Color(0.90f, 0.50f, 0.22f, 0.82f);
+        new Color(1.00f, 0.68f, 0.36f, 1f);
     public static readonly Color TreeGrip =
         new Color(0.56f, 0.60f, 0.65f, 0.9f);
     public static readonly Color TreeGripHover =
@@ -137,9 +137,9 @@ public static class ThreadlightEditorTheme {
         new Color(0.72f, 0.75f, 0.79f, 0.95f);
     public static readonly Color TreeInsertion =
         new Color(0.98f, 0.67f, 0.28f, 0.98f);
-    public static readonly Color Field = new Color(0.070f, 0.056f, 0.048f, 1f);
-    public static readonly Color FieldHover = new Color(0.100f, 0.076f, 0.060f, 1f);
-    public static readonly Color FieldFocus = new Color(0.110f, 0.070f, 0.045f, 1f);
+    public static readonly Color Field = new Color(0.095f, 0.078f, 0.065f, 1f);
+    public static readonly Color FieldHover = new Color(0.130f, 0.102f, 0.082f, 1f);
+    public static readonly Color FieldFocus = new Color(0.145f, 0.095f, 0.064f, 1f);
     public static readonly Color FieldBorder = new Color(0.62f, 0.48f, 0.34f, 0.42f);
     public static readonly Color FieldBorderHover = new Color(0.92f, 0.56f, 0.25f, 0.62f);
     public static readonly Color FieldBorderFocus = new Color(1.00f, 0.70f, 0.34f, 0.90f);
@@ -167,9 +167,9 @@ public static class ThreadlightEditorTheme {
         new Color(0.62f, 0.48f, 0.34f, 0.24f);
     public static readonly Color FloatingDockAccent = BorderStrong;
     public static readonly Color Text = new Color(0.975f, 0.935f, 0.865f, 1f);
-    public static readonly Color TextMuted = new Color(0.790f, 0.715f, 0.630f, 1f);
+    public static readonly Color TextMuted = new Color(0.860f, 0.790f, 0.710f, 1f);
     public static readonly Color TextDim = new Color(0.555f, 0.485f, 0.420f, 1f);
-    public static readonly Color Value = new Color(0.88f, 0.82f, 0.74f, 1f);
+    public static readonly Color Value = new Color(0.94f, 0.88f, 0.80f, 1f);
     public static readonly Color InfoBar = new Color(0.050f, 0.072f, 0.065f, 1f);
     public static readonly Color InfoAccent = new Color(0.38f, 0.64f, 0.56f, 1f);
     public static readonly Color Warning = new Color(1.00f, 0.78f, 0.24f, 1f);

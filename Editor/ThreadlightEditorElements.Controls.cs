@@ -22,8 +22,9 @@ public static partial class ThreadlightEditorElements {
         if (field == null || field.ClassListContains(FieldClassName)) return;
         ApplySharedStyles(field);
         field.AddToClassList(FieldClassName);
-        BindWidthClass(field, FieldStackedClassName, ThreadlightEditorTheme.FieldStackBreakpoint);
         bool labeled = !string.IsNullOrWhiteSpace(field.label);
+        if (labeled)
+            BindWidthClass(field, FieldStackedClassName, ThreadlightEditorTheme.FieldStackBreakpoint);
         field.labelElement.style.display = labeled ? DisplayStyle.Flex : DisplayStyle.None;
         field.labelElement.style.color = ThreadlightEditorTheme.TextMuted;
         VisualElement input = DirectInput(field);
@@ -211,6 +212,7 @@ public static partial class ThreadlightEditorElements {
         input.AddToClassList("threadlight-field-input");
         input.AddToClassList(axis ? "threadlight-field-input-axis" : "threadlight-field-input-standard");
         input.style.backgroundColor = ThreadlightEditorTheme.Field;
+        input.style.color = ThreadlightEditorTheme.Text;
         SetBorderColor(input, ThreadlightEditorTheme.FieldBorder);
     }
     private static void StyleObjectPicker(UnityEditor.UIElements.ObjectField field,
