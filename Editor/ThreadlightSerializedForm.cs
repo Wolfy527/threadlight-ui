@@ -93,7 +93,11 @@ public sealed class ThreadlightSerializedForm {
                     _ => ThreadlightEditorElements.RefreshToggleControl(toggle));
                 return row;
             case ThreadlightFormFieldKind.Text:
-                return Style(new TextField(field.Label) { bindingPath = field.Path });
+                TextField text = new TextField(field.Label) { bindingPath = field.Path };
+                Style(text);
+                ThreadlightContinuousEditGesture.AttachBound(
+                    text, $"Set {field.Label}", true);
+                return text;
             case ThreadlightFormFieldKind.ObjectReference:
                 return Style(new ObjectField(field.Label) {
                     bindingPath = field.Path,
@@ -112,14 +116,24 @@ public sealed class ThreadlightSerializedForm {
         SerializedProperty property = source.FindProperty(field.Path) ?? throw
             new InvalidOperationException($"Property '{field.Path}' was not found.");
         List<string> choices = new List<string>(property.enumDisplayNames);
-        int selected = Mathf.Clamp(property.enumValueIndex, 0, choices.Count - 1);
-        PopupField<string> control = new PopupField<string>(
-            field.Label, choices, choices[selected]);
+        PopupField<string> control;
+        if (choices.Count == 0) {
+            control = new PopupField<string>(field.Label);
+            control.SetEnabled(false);
+        } else {
+            int selected = Mathf.Clamp(property.enumValueIndex, 0, choices.Count - 1);
+            control = new PopupField<string>(field.Label, choices, choices[selected]);
+        }
         Style(control);
         control.RegisterValueChangedCallback(evt => {
             int next = choices.IndexOf(evt.newValue);
             if (next >= 0)
                 Change(field, target => target.enumValueIndex = next);
+        });
+        control.TrackPropertyValue(property, updated => {
+            int next = updated.enumValueIndex;
+            if (next >= 0 && next < choices.Count)
+                control.SetValueWithoutNotify(choices[next]);
         });
         return control;
     }
@@ -128,6 +142,8 @@ public sealed class ThreadlightSerializedForm {
             { bindingPath = field.Path };
         ThreadlightEditorElements.StyleVector3Field(
             control, interactionAccent, interactionAccent);
+        ThreadlightContinuousEditGesture.AttachBound(
+            control, $"Set {field.Label}");
         return control;
     }
     private void Change(ThreadlightFormField field, Action<SerializedProperty> change) {

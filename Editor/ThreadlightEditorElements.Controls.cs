@@ -22,6 +22,10 @@ public static partial class ThreadlightEditorElements {
         if (field == null || field.ClassListContains(FieldClassName)) return;
         ApplySharedStyles(field);
         field.AddToClassList(FieldClassName);
+        if (field is FloatField || field is IntegerField || field is LongField || field is DoubleField)
+            field.AddToClassList("threadlight-field--numeric");
+        if (field is LongField || field is DoubleField)
+            field.AddToClassList("threadlight-field--wide-number");
         bool labeled = !string.IsNullOrWhiteSpace(field.label);
         if (labeled)
             BindWidthClass(field, FieldStackedClassName, ThreadlightEditorTheme.FieldStackBreakpoint);
@@ -81,10 +85,11 @@ public static partial class ThreadlightEditorElements {
         StyleField(field, hoverBorder, focusBorder);
         VisualElement input = DirectInput(field);
         if (input != null) {
-            input.style.width = StyleKeyword.Auto;
+            input.style.width = 252f;
+            input.style.maxWidth = new Length(100f, LengthUnit.Percent);
             input.style.minWidth = 0f;
-            input.style.flexBasis = 0f;
-            input.style.flexGrow = 1f;
+            input.style.flexBasis = StyleKeyword.Auto;
+            input.style.flexGrow = 0f;
             input.style.flexShrink = 1f;
             input.style.flexDirection = FlexDirection.Row;
             input.style.alignItems = Align.Center;
@@ -130,12 +135,13 @@ public static partial class ThreadlightEditorElements {
         Action interactionRefresh = null;
         Action<bool, bool> apply = (hovered, focused) => {
             bool enabled = value();
-            StyleToggle(toggle, enabled, interactionAccent);
-            if (hovered)
+            StyleToggle(toggle, enabled);
+            if (hovered) {
                 toggle.style.backgroundColor = enabled ? ThreadlightEditorTheme.ToggleOnHover : ThreadlightEditorTheme.ToggleOffHover;
+                SetBorderColor(toggle, ThreadlightEditorTheme.ToggleBorderHover);
+            }
             if (focused)
-                SetBorderColor(toggle, ResolveColor(interactionAccent,
-                    ThreadlightEditorTheme.FieldBorderFocus));
+                SetBorderColor(toggle, ThreadlightEditorTheme.ToggleBorderFocus);
         };
         toggle = new Button(() => { changed?.Invoke(!value()); interactionRefresh?.Invoke(); });
         ApplySharedStyles(toggle);
@@ -265,16 +271,15 @@ public static partial class ThreadlightEditorElements {
             if (child.ClassListContains("unity-base-field__input")) return child;
         return null;
     }
-    private static void StyleToggle(Button toggle, bool enabled, Func<Color> interactionAccent) {
+    private static void StyleToggle(Button toggle, bool enabled) {
         if (toggle == null) return;
         toggle.text = "●";
         toggle.style.color = enabled ? ThreadlightEditorTheme.ToggleThumbOn : ThreadlightEditorTheme.ToggleThumbOff;
         toggle.style.unityTextAlign = enabled ? TextAnchor.MiddleRight : TextAnchor.MiddleLeft;
         toggle.style.backgroundColor = enabled ? ThreadlightEditorTheme.ToggleOn : ThreadlightEditorTheme.ToggleOff;
-        Color accent = ResolveColor(interactionAccent,
-            ThreadlightEditorTheme.Palette(ThreadlightEditorTone.Standard).Accent);
-        SetBorderColor(toggle, enabled ? ThreadlightEditorTheme.WithAlpha(accent, .78f)
-            : ThreadlightEditorTheme.FieldBorder);
+        // Toggle state has one studio-wide color, independent of its section accent.
+        SetBorderColor(toggle, enabled ? ThreadlightEditorTheme.ToggleBorderOn
+            : ThreadlightEditorTheme.ToggleBorderOff);
     }
 }
 }

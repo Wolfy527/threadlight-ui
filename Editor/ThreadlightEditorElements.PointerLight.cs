@@ -48,17 +48,26 @@ public static partial class ThreadlightEditorElements {
         state.Root = root;
         PanelPointerLightState panelState = PanelPointerLights.GetValue(root, _ => new PanelPointerLightState());
         if (panelState.Light == null) {
-            panelState.Light = new VisualElement { name = "wolfy-pointer-light", pickingMode = PickingMode.Ignore };
+            panelState.Light = new VisualElement {
+                name = "wolfy-pointer-light", pickingMode = PickingMode.Ignore,
+                usageHints = UsageHints.DynamicTransform | UsageHints.DynamicColor
+            };
             panelState.Light.style.position = Position.Absolute;
+            panelState.Light.style.left = panelState.Light.style.top = 0f;
             panelState.Light.style.backgroundImage = new StyleBackground(AuroraTexture());
             root.Add(panelState.Light);
         }
         if (panelState.Light.parent != root) { panelState.Light.RemoveFromHierarchy(); root.Add(panelState.Light); }
+        // A retained panel can mount a rebuilt workspace after the existing light.
+        // Restore its overlay order only when necessary, without relaying out on motion.
+        if (root.hierarchy.IndexOf(panelState.Light) != root.hierarchy.childCount - 1)
+            panelState.Light.BringToFront();
         panelState.ActiveOwner = owner;
         Vector2 local = root.WorldToLocal(panelPosition);
         panelState.Light.style.width = panelState.Light.style.height = state.Diameter;
-        panelState.Light.style.left = local.x - state.Diameter * .5f;
-        panelState.Light.style.top = local.y - state.Diameter * .5f;
+        // Pointer motion must not invalidate the panel's layout on every event.
+        panelState.Light.transform.position = new Vector3(
+            local.x - state.Diameter * .5f, local.y - state.Diameter * .5f, 0f);
         panelState.Light.style.unityBackgroundImageTintColor = state.Tint?.Invoke() ?? Color.white;
         panelState.Light.style.opacity = state.Opacity;
     }

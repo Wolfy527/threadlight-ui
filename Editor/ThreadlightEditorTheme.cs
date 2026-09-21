@@ -95,36 +95,36 @@ public static class ThreadlightEditorTheme {
     public static readonly Color WorkspaceSettingsAccent =
         new Color(0.68f, 0.56f, 0.44f, 1f);
     public static readonly Color GlassSurface =
-        new Color(0.105f, 0.078f, 0.060f, 0.78f);
+        new Color(0.105f, 0.078f, 0.060f, .62f);
     public static readonly Color GlassHover =
-        new Color(0.155f, 0.115f, 0.080f, 0.90f);
-    public static readonly Color Panel = new Color(0.105f, 0.085f, 0.072f, 1f);
-    public static readonly Color PanelTop = new Color(0.140f, 0.108f, 0.085f, 1f);
-    public static readonly Color PanelBottom = new Color(0.075f, 0.064f, 0.056f, 1f);
+        new Color(0.155f, 0.115f, 0.080f, .76f);
+    public static readonly Color Panel = new Color(0.105f, 0.085f, 0.072f, .62f);
+    public static readonly Color PanelTop = new Color(0.140f, 0.108f, 0.085f, .68f);
+    public static readonly Color PanelBottom = new Color(0.075f, 0.064f, 0.056f, .62f);
     public static readonly Color PanelHeader = new Color(0.46f, 0.27f, 0.13f, 0.22f);
     public static readonly Color SectionHeader =
         new Color(0.25f, 0.15f, 0.085f, 0.70f);
-    public static readonly Color PanelInset = new Color(0.048f, 0.041f, 0.036f, 1f);
+    public static readonly Color PanelInset = new Color(0.048f, 0.041f, 0.036f, .62f);
     public static readonly Color Card = Panel;
     public static readonly Color CardSoft = PanelTop;
-    public static readonly Color CardHover = new Color(0.145f, 0.100f, 0.070f, 1f);
+    public static readonly Color CardHover = new Color(0.145f, 0.100f, 0.070f, .76f);
     public static readonly Color CardHeader = PanelHeader;
     public static readonly Color CardInset = PanelInset;
-    public static readonly Color ItemHeader = new Color(0.090f, 0.068f, 0.052f, 1f);
-    public static readonly Color ItemHeaderHover = new Color(0.150f, 0.100f, 0.065f, 1f);
-    public static readonly Color ItemBody = new Color(0.047f, 0.041f, 0.036f, 1f);
-    public static readonly Color ItemBadge = new Color(0.180f, 0.145f, 0.105f, 1f);
+    public static readonly Color ItemHeader = new Color(0.090f, 0.068f, 0.052f, .64f);
+    public static readonly Color ItemHeaderHover = new Color(0.150f, 0.100f, 0.065f, .78f);
+    public static readonly Color ItemBody = new Color(0.047f, 0.041f, 0.036f, .64f);
+    public static readonly Color ItemBadge = new Color(0.180f, 0.145f, 0.105f, .84f);
     public static readonly Color ItemBadgeBorder = new Color(0.66f, 0.48f, 0.28f, 0.24f);
     public static readonly Color HierarchyRowAlternate =
-        new Color(0.095f, 0.078f, 0.064f, 1f);
+        new Color(0.095f, 0.078f, 0.064f, .60f);
     public static readonly Color TreeDropTarget =
         new Color(0.25f, 0.48f, 0.39f, 0.72f);
     public static readonly Color TreeRowHover =
-        new Color(0.145f, 0.105f, 0.070f, 0.94f);
+        new Color(0.145f, 0.105f, 0.070f, .80f);
     public static readonly Color TreeRowEven =
-        new Color(0.110f, 0.090f, 0.074f, 1f);
+        new Color(0.110f, 0.090f, 0.074f, .64f);
     public static readonly Color TreeRowOdd =
-        new Color(0.085f, 0.073f, 0.062f, 1f);
+        new Color(0.085f, 0.073f, 0.062f, .58f);
     public static readonly Color TreeRequiredAccent =
         new Color(0.58f, 0.88f, 0.80f, 1f);
     public static readonly Color TreeCustomAccent =
@@ -137,9 +137,9 @@ public static class ThreadlightEditorTheme {
         new Color(0.72f, 0.75f, 0.79f, 0.95f);
     public static readonly Color TreeInsertion =
         new Color(0.98f, 0.67f, 0.28f, 0.98f);
-    public static readonly Color Field = new Color(0.095f, 0.078f, 0.065f, 1f);
-    public static readonly Color FieldHover = new Color(0.130f, 0.102f, 0.082f, 1f);
-    public static readonly Color FieldFocus = new Color(0.145f, 0.095f, 0.064f, 1f);
+    public static readonly Color Field = new Color(0.095f, 0.078f, 0.065f, .82f);
+    public static readonly Color FieldHover = new Color(0.130f, 0.102f, 0.082f, .88f);
+    public static readonly Color FieldFocus = new Color(0.145f, 0.095f, 0.064f, .92f);
     public static readonly Color FieldBorder = new Color(0.62f, 0.48f, 0.34f, 0.42f);
     public static readonly Color FieldBorderHover = new Color(0.92f, 0.56f, 0.25f, 0.62f);
     public static readonly Color FieldBorderFocus = new Color(1.00f, 0.70f, 0.34f, 0.90f);
@@ -147,6 +147,10 @@ public static class ThreadlightEditorTheme {
     public static readonly Color ToggleOffHover = new Color(0.175f, 0.125f, 0.095f, 1f);
     public static readonly Color ToggleOn = new Color(0.68f, 0.31f, 0.12f, 1f);
     public static readonly Color ToggleOnHover = new Color(0.86f, 0.44f, 0.16f, 1f);
+    public static readonly Color ToggleBorderOff = WithAlpha(ToggleOnHover, .45f);
+    public static readonly Color ToggleBorderOn = WithAlpha(ToggleOnHover, .85f);
+    public static readonly Color ToggleBorderHover = Color.Lerp(ToggleOnHover, Color.white, .18f);
+    public static readonly Color ToggleBorderFocus = Color.Lerp(ToggleOnHover, Color.white, .32f);
     public static readonly Color ToggleThumbOff = new Color(0.56f, 0.50f, 0.45f, 1f);
     public static readonly Color ToggleThumbOn = new Color(1.00f, 0.93f, 0.78f, 1f);
     public static readonly Color ButtonPrimaryLeft = new Color(0.76f, 0.35f, 0.13f, 1f);
@@ -162,7 +166,7 @@ public static class ThreadlightEditorTheme {
     public static readonly Color BorderStrong = new Color(0.70f, 0.54f, 0.40f, 0.34f);
     public static readonly Color BorderDark = new Color(0.018f, 0.016f, 0.014f, 0.90f);
     public static readonly Color FloatingDock =
-        new Color(0.047f, 0.040f, 0.035f, 1f);
+        new Color(0.047f, 0.040f, 0.035f, .94f);
     public static readonly Color FloatingDockBorder =
         new Color(0.62f, 0.48f, 0.34f, 0.24f);
     public static readonly Color FloatingDockAccent = BorderStrong;
@@ -227,6 +231,10 @@ public static class ThreadlightEditorTheme {
             Color.Lerp(PanelTop, accent, .16f),
             accent,
             WithAlpha(accent, .52f));
+
+    /// <summary>Keep surface tint translucent without fading its text, borders, or children.</summary>
+    public static Color StudioSurface(Color color, float maximumOpacity = .62f) =>
+        WithAlpha(color, Mathf.Min(color.a, maximumOpacity));
 
     public static Color WithAlpha(Color color, float alpha) =>
         new Color(color.r, color.g, color.b, alpha);

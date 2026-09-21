@@ -81,13 +81,13 @@ public static partial class ThreadlightEditorElements
                     Mathf.InverseLerp(0, owner.contentRect.height, local.y) * 2 - 1
                 );
                 motion.LastPointerMove = EditorApplication.timeSinceStartup;
-                WakeAurora(motion);
+                WakeAuroraForPointer(motion);
             });
             owner.RegisterCallback<PointerLeaveEvent>(_ =>
             {
                 motion.PointerInside = false;
                 motion.Pointer = Vector2.zero;
-                WakeAurora(motion);
+                WakeAuroraForPointer(motion);
             });
         }
 
@@ -147,6 +147,15 @@ public static partial class ThreadlightEditorElements
         if (motion != null)
             motion.NextFrame = 0d;
         nextAuroraFrame = 0d;
+    }
+
+    private static void WakeAuroraForPointer(AuroraMotion motion)
+    {
+        // Wake an idle effect without letting high-frequency pointer events
+        // reset the active frame deadline and bypass the animation cadence.
+        double due = motion.LastFrame + MovingAuroraFrameInterval;
+        motion.NextFrame = Math.Min(motion.NextFrame, due);
+        nextAuroraFrame = Math.Min(nextAuroraFrame, motion.NextFrame);
     }
 
     private static void UpdateAuroraMotion()
@@ -335,7 +344,8 @@ public static partial class ThreadlightEditorElements
         float size = ParticleSize(index);
         VisualElement particle = new VisualElement
         {
-            pickingMode = PickingMode.Ignore
+            pickingMode = PickingMode.Ignore,
+            usageHints = UsageHints.DynamicTransform
         };
         particle.style.position = Position.Absolute;
         particle.style.left = Length.Percent(ParticleLeftPercent(index));

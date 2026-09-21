@@ -1,7 +1,7 @@
 {
   "name": "com.wolfyvr.threadlight.ui",
   "displayName": "ThreadLight UI",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "unity": "2022.3",
   "description": "Shared editor theme and controls for ThreadLight customer and creator tools.",
   "license": "LicenseRef-Threadlight-Proprietary",

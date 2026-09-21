@@ -35,9 +35,22 @@ public static partial class ThreadlightEditorElements {
         label.style.color = color;
         return label;
     }
+    /// <summary>Shared explanatory copy; callers retain their role-specific spacing.</summary>
+    public static Label CreateDescription(string text, string roleClassName = null) {
+        Label label = new Label(text ?? string.Empty);
+        StyleDescription(label);
+        if (!string.IsNullOrWhiteSpace(roleClassName)) label.AddToClassList(roleClassName);
+        return label;
+    }
+    public static void StyleDescription(Label label) {
+        if (label == null) return;
+        ApplySharedStyles(label);
+        label.AddToClassList("threadlight-description");
+        label.style.color = ThreadlightEditorTheme.TextMuted;
+    }
     private static void AddCopy(VisualElement parent, string title, string body, string titleClass, string bodyClass) {
         parent.Add(Text(title, titleClass, ThreadlightEditorTheme.Text));
-        if (!string.IsNullOrWhiteSpace(body)) parent.Add(Text(body.Trim(), bodyClass, ThreadlightEditorTheme.TextMuted));
+        if (!string.IsNullOrWhiteSpace(body)) parent.Add(CreateDescription(body.Trim(), bodyClass));
     }
     public static VisualElement CreateInspectorRoot() {
         VisualElement root = Element("threadlight-inspector-root");
@@ -46,9 +59,13 @@ public static partial class ThreadlightEditorElements {
         root.Add(CreateAuroraAtmosphere(root));
         return root;
     }
-    public static VisualElement CreateAuroraAtmosphere(VisualElement motionOwner) {
+    public static VisualElement CreateAuroraAtmosphere(VisualElement motionOwner, bool workspaceScale = false) {
         VisualElement atmosphere = Element("threadlight-aurora-atmosphere"); atmosphere.pickingMode = PickingMode.Ignore;
-        VisualElement[] layers = { Glow(-90, -170, 540, 380, ThreadlightEditorTheme.AuroraViolet, .28f),
+        VisualElement[] layers = workspaceScale
+            ? new[] { Glow(70, -270, 760, 500, ThreadlightEditorTheme.AuroraViolet, .28f),
+                Glow(-210, -270, 640, 590, ThreadlightEditorTheme.AuroraCyan, .21f, true, true),
+                Glow(60, 135, 520, 420, ThreadlightEditorTheme.AuroraMagenta, .16f, true) }
+            : new[] { Glow(-90, -170, 540, 380, ThreadlightEditorTheme.AuroraViolet, .28f),
             Glow(-130, -160, 440, 420, ThreadlightEditorTheme.AuroraCyan, .21f, true, true),
             Glow(45, 115, 330, 270, ThreadlightEditorTheme.AuroraMagenta, .16f, true) };
         foreach (VisualElement layer in layers) atmosphere.Add(layer); BindAuroraMotion(motionOwner, layers);
@@ -59,7 +76,8 @@ public static partial class ThreadlightEditorElements {
     public static VisualElement CreateInspectorBanner(string title, string description, Color accent) {
         VisualElement banner = Element("threadlight-banner");
         banner.AddToClassList("threadlight-level--page");
-        banner.style.backgroundColor = Color.Lerp(ThreadlightEditorTheme.ModuleCore, ThreadlightEditorTheme.HeaderRight, .18f);
+        banner.style.backgroundColor = ThreadlightEditorTheme.StudioSurface(
+            Color.Lerp(ThreadlightEditorTheme.ModuleCore, ThreadlightEditorTheme.HeaderRight, .18f), .72f);
         SetBorderColor(banner, Color.Lerp(ThreadlightEditorTheme.BorderStrong, accent, .38f));
         Texture2D logo = LoadHeaderLogo();
         if (logo != null) {
@@ -75,8 +93,9 @@ public static partial class ThreadlightEditorElements {
         return banner;
     }
     public static VisualElement CreateMessage(string title, string message, MessageType type = MessageType.Info) {
-        Color accent = type == MessageType.Error ?
-            ThreadlightEditorTheme.Error : ThreadlightEditorTheme.Warning;
+        Color accent = type == MessageType.Error ? ThreadlightEditorTheme.Error :
+            type == MessageType.Warning ? ThreadlightEditorTheme.Warning :
+            ThreadlightEditorTheme.InfoAccent;
         float fillStrength = type == MessageType.Error ? .19f : .15f;
         float hoverStrength = type == MessageType.Error ? .27f : .22f;
         float borderAlpha = type == MessageType.Error ? .84f : .72f;
@@ -104,7 +123,7 @@ public static partial class ThreadlightEditorElements {
         if (element == null) return;
         ApplySharedStyles(element);
         element.AddToClassList("threadlight-bordered-surface");
-        element.style.backgroundColor = background;
+        element.style.backgroundColor = ThreadlightEditorTheme.StudioSurface(background);
         // A folder frame is part of its resting hierarchy, not hover feedback.
         // Start from the normal border token so nested surfaces remain legible
         // before any pointer event, then let interaction only increase emphasis.
@@ -143,6 +162,11 @@ public static partial class ThreadlightEditorElements {
         if (row == null) return;
         ApplySharedStyles(row);
         row.AddToClassList("threadlight-field-action-row");
+        foreach (VisualElement child in row.Children()) {
+            child.AddToClassList(child is Button
+                ? "threadlight-field-action-button"
+                : "threadlight-field-action-control");
+        }
         BindWidthClass(row, "threadlight-field-action-row--stacked", 340f);
     }
     public static Label CreateSubcategoryLabel(string text, Color? accent = null) {
@@ -197,18 +221,33 @@ public static partial class ThreadlightEditorElements {
         Button button = new Button(clicked) { text = text ?? string.Empty };
         ApplySharedStyles(button);
         button.AddToClassList(className);
-        ClearDefaultToolkitButtonBackground(button);
-        button.style.backgroundColor = background;
-        button.style.color = ThreadlightEditorTheme.Text;
-        SetBorderColor(button, border);
-        Color interaction = danger ? ThreadlightEditorTheme.Error : accent ??
+        if (danger) {
+            StyleDangerButton(button);
+            return button;
+        }
+        Color interaction = accent ??
             ThreadlightEditorTheme.Palette(ThreadlightEditorTone.Standard).Accent;
-        RegisterButtonHover(button, background, danger
-                ? Color.Lerp(background, interaction, .24f)
-                : Color.Lerp(background, interaction, accent.HasValue ? .24f : .12f),
-            border, Color.Lerp(interaction, Color.white, danger ? .28f : .22f));
+        StyleButton(button, background,
+            Color.Lerp(background, interaction, accent.HasValue ? .24f : .12f),
+            border, Color.Lerp(interaction, Color.white, .22f));
         return button;
     }
+    /// <summary>Apply a button palette without changing its layout or action.</summary>
+    public static void StyleButton(Button button, Color background, Color hoverBackground,
+        Color border, Color hoverBorder) =>
+        StyleButton(button, () => background, () => hoverBackground, () => border, () => hoverBorder);
+    public static void StyleButton(Button button, Func<Color> background, Func<Color> hoverBackground,
+        Func<Color> border, Func<Color> hoverBorder) {
+        if (button == null) return;
+        ClearDefaultToolkitButtonBackground(button);
+        RegisterButtonHover(button, background, hoverBackground, border, hoverBorder);
+    }
+    public static void StyleDangerButton(Button button) =>
+        StyleButton(button,
+            ThreadlightEditorTheme.ButtonDangerLeft,
+            Color.Lerp(ThreadlightEditorTheme.ButtonDangerLeft, ThreadlightEditorTheme.Error, .24f),
+            ThreadlightEditorTheme.Error,
+            Color.Lerp(ThreadlightEditorTheme.Error, Color.white, .28f));
     public static void StyleIconButton(Button button, Color background, Color border, Color text, Color hoverBackground) {
         StyleIconButton(button, () => background, () => border, text, () => hoverBackground,
             () => Color.Lerp(text, Color.white, .26f));
@@ -243,6 +282,10 @@ public static partial class ThreadlightEditorElements {
     public static void StyleFooterDockSurface(VisualElement dock, Color accent) {
         if (dock == null) return;
         ApplySharedStyles(dock);
+        if (!dock.ClassListContains("threadlight-studio-footer")) {
+            dock.AddToClassList("threadlight-studio-footer");
+            BindWidthClass(dock, "threadlight-footer--stacked", 600f);
+        }
         dock.style.backgroundColor = ThreadlightEditorTheme.FloatingDock;
         SetBorderColor(dock, Color.Lerp(ThreadlightEditorTheme.FloatingDockBorder, accent, .42f));
         RegisterPointerLight(dock, accent, 118, .34f);
@@ -263,7 +306,7 @@ public static partial class ThreadlightEditorElements {
     public static VisualElement CreateFooterCopy(string title, string status, out Label statusLabel) {
         VisualElement copy = Element("threadlight-footer-copy");
         copy.Add(Text(title, "threadlight-footer-title", ThreadlightEditorTheme.Text));
-        statusLabel = Text(status, "threadlight-footer-status", ThreadlightEditorTheme.TextMuted);
+        statusLabel = CreateDescription(status, "threadlight-footer-status");
         copy.Add(statusLabel);
         return copy;
     }
@@ -304,7 +347,9 @@ public static partial class ThreadlightEditorElements {
     }
     private static VisualElement Glow(float x, float y, float width, float height, Color tint, float opacity,
         bool right = false, bool bottom = false) {
-        VisualElement glow = new VisualElement { pickingMode = PickingMode.Ignore };
+        VisualElement glow = new VisualElement {
+            pickingMode = PickingMode.Ignore, usageHints = UsageHints.DynamicTransform
+        };
         glow.style.position = Position.Absolute; glow.style.width = width; glow.style.height = height;
         if (right) glow.style.right = x; else glow.style.left = x;
         if (bottom) glow.style.bottom = y; else glow.style.top = y;
